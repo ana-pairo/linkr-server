@@ -1,4 +1,4 @@
-import connection from "../db/db.js";
+import { listLikes } from "../repositories/likes.repository.js";
 
 async function likePost (req, res) {
 
@@ -12,18 +12,7 @@ async function listPostLikes (req, res) {
     const { postId } = req.params;
 
     try {
-        const postLikes = (await connection.query(
-            `
-                SELECT 
-                    COUNT(likes.id) AS "totalLikes", users.name AS username 
-                FROM 
-                    likes
-                JOIN users ON likes."userId" = users.id
-                WHERE likes."postId" = $1
-                GROUP BY users.name;
-            `,
-            [postId]
-        )).rows;
+        const postLikes = (await listLikes(postId)).rows;
 
         res.status(200).send(postLikes);
     } catch (error) {
