@@ -18,7 +18,7 @@ function getPostsByUser (userId) {
             JOIN users ON posts."userId" = users.id
             LEFT JOIN likes ON likes."postId" = posts.id
             WHERE users.id = $1
-            GROUP BY posts.id, users.username, users.picture;
+            GROUP BY posts.id, users.username, users.picture LIMIT 20;
         `,
         [userId]
     );
