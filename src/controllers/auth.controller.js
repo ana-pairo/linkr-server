@@ -42,7 +42,7 @@ async function signIn(req, res) {
     if (bcrypt.compareSync(password, user.password)) {
       await openSession({ token, userId });
 
-      res.status(STATUS_CODE.OK).send({ token, picture });
+      res.status(STATUS_CODE.OK).send({ token, picture, userId });
     } else {
       res.sendStatus(STATUS_CODE.UNAUTHORIZED);
     }
@@ -52,14 +52,7 @@ async function signIn(req, res) {
 }
 
 function auth(req, res) {
-  const token = req.headers.authorization?.replace("Bearer ", "");
-
-  try {
-    const verifyToken = jwt.verify(token, process.env.TOKEN_SECRET);
-    res.status(STATUS_CODE.OK).send({ userId: verifyToken.userId });
-  } catch (error) {
-    res.sendStatus(STATUS_CODE.UNAUTHORIZED);
-  }
+  res.sendStatus(STATUS_CODE.OK);
 }
 
 export { signUp, signIn, auth };

@@ -1,3 +1,8 @@
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+
+dotenv.config();
+
 import { STATUS_CODE } from "../enums/statusCode.js";
 import { signUpSCHEMA, signInSCHEMA } from "../schemas/authSchema.js";
 import { checkIfEmailIsValid } from "../repositories/auth.repository.js";
@@ -97,7 +102,13 @@ function authMiddleware(req, res, next) {
     return;
   }
 
-  next();
+  try {
+    const verifyToken = jwt.verify(token, process.env.TOKEN_SECRET);
+    res.locals.userId = verifyToken.userId;
+    next();
+  } catch (error) {
+    res.sendStatus(STATUS_CODE.UNAUTHORIZED);
+  }
 }
 
 export { signUpMiddleware, signInMiddleware, authMiddleware };
