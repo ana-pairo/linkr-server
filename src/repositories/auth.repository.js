@@ -1,10 +1,10 @@
 import connection from "../db/db.js";
 
-async function checkIfEmailIsRepited({ email }) {
+async function checkIfEmailIsValid({ email }) {
   return connection.query(
     `
       SELECT 
-          id 
+          *
       FROM 
           users 
       WHERE 
@@ -25,4 +25,16 @@ async function insertUser({ username, email, passwordHash, picture }) {
   );
 }
 
-export { checkIfEmailIsRepited, insertUser };
+async function openSession({ token, userId }) {
+  return connection.query(
+    `
+      INSERT INTO
+        sessions ("userId", token)
+      VALUES
+        ($1, $2);
+    `,
+    [userId, token]
+  );
+}
+
+export { checkIfEmailIsValid, insertUser, openSession };

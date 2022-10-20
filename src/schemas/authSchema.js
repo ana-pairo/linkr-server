@@ -5,7 +5,7 @@ const signUpSCHEMA = joi.object({
   password: joi
     .string()
     .required()
-    .min(4)
+    .min(5)
     .regex(/\d/)
     .regex(/[A-Z]/)
     .regex(/[^A-Z a-z0-9]/),
@@ -22,4 +22,9 @@ const signUpSCHEMA = joi.object({
     ),
 });
 
-export { signUpSCHEMA };
+const signInSCHEMA = joi.object({
+  email: joi.string().email().required(),
+  password: joi.string().required().trim(),
+});
+
+export { signUpSCHEMA, signInSCHEMA };
