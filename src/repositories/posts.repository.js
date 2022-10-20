@@ -45,9 +45,7 @@ async function updatePostTrends (postId, newTrends) {
         [postId]
     );
 
-    try {
-        const trendsUpdatesArray = [];
-    
+    try {    
         for (let i = 0; i < newTrends.length; i++) {
             const trend = newTrends[i];
             let trendId = (await connection.query(
