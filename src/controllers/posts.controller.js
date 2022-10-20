@@ -9,8 +9,7 @@ async function updatePost (req, res) {
         return res.status(422).send(errors);
     }
     
-    const { postId } = res.locals;
-    const userId = 1; //TODO: Change to res.locals after authentication implementing middleware
+    const { postId, userId } = res.locals;
     const { newDescription, newTrends } = req.body;
 
     try {
@@ -26,8 +25,7 @@ async function updatePost (req, res) {
 }
 
 async function deletePost (req, res) {
-    const { postId } = res.locals;
-    const userId = 1; //TODO: Change to res.locals after authentication implementing middleware
+    const { postId, userId } = res.locals;
 
     try {
         const postCheck = (await checkIfPostIsPostedByUser(postId, userId));

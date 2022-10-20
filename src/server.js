@@ -13,10 +13,10 @@ const server = express();
 server.use(express.json());
 server.use(cors());
 
+server.use(authRouter);
 server.use(trendsRouter);
 server.use(postsRouter);
 server.use(likesRouter);
-server.use(authRouter);
 server.use(usersRouter);
 
 server.get("/status", (req, res) => {
