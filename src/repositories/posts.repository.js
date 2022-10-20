@@ -110,4 +110,31 @@ async function deletePostData (postId) {
     return;
 }
 
-export { checkIfPostIsPostedByUser, deletePostData, updatePostData }
+async function insertPostData ( userId, link, description, trends ) {
+    const postId = await insertPost(userId, link, description);
+    updatePostTrends(postId, trends);
+
+    return;
+}
+
+async function insertPost (userId, link, description) {
+    await connection.query(
+        `
+            INSERT INTO posts 
+                (link, description, "userId") 
+            VALUES 
+                ($1, $2, $3);  
+        `,
+        [link, description, userId]
+    );
+    const postId = await connection.query(
+        `
+            SELECT MAX(id) AS max FROM posts WHERE "userId" = $1;
+        `,
+        [userId]
+    );
+
+    return postId.rows[0].max;
+}
+
+export { checkIfPostIsPostedByUser, deletePostData, updatePostData, insertPostData };
