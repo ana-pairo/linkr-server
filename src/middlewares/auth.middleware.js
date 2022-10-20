@@ -1,6 +1,6 @@
 import { STATUS_CODE } from "../enums/statusCode.js";
-import { signUpSCHEMA } from "../schemas/signUpSchema.js";
-import { checkIfEmailIsRepited } from "../repositories/sign.repository.js";
+import { signUpSCHEMA, signInSCHEMA } from "../schemas/authSchema.js";
+import { checkIfEmailIsValid } from "../repositories/auth.repository.js";
 
 async function signUpMiddleware(req, res, next) {
   if (!req.body) {
@@ -27,7 +27,7 @@ async function signUpMiddleware(req, res, next) {
   const { email, username } = req.body;
 
   try {
-    const isEmailRepited = (await checkIfEmailIsRepited({ email })).rows[0];
+    const isEmailRepited = (await checkIfEmailIsValid({ email })).rows[0];
 
     if (isEmailRepited) {
       res.status(STATUS_CODE.CONFLICT).send("This email is not available");
@@ -57,7 +57,50 @@ async function signUpMiddleware(req, res, next) {
   next();
 }
 
-export { signUpMiddleware };
+async function signInMiddleware(req, res, next) {
+  if (!req.body) {
+    res.sendStatus(STATUS_CODE.BAD_REQUEST);
+  }
+
+  const isBodyValid = signInSCHEMA.validate(req.body, { abortEarly: false });
+
+  if (isBodyValid.error) {
+    const errors = isBodyValid.error.details.map((detail) => detail.message);
+
+    res.status(STATUS_CODE.UNPROCESSABLE).send(errors);
+    return;
+  }
+
+  const { email } = req.body;
+
+  try {
+    const user = (await checkIfEmailIsValid({ email })).rows[0];
+
+    if (!user) {
+      res.sendStatus(STATUS_CODE.UNAUTHORIZED);
+      return;
+    }
+
+    res.locals.user = user;
+
+    next();
+  } catch (error) {
+    res.sendStatus(STATUS_CODE.SERVER_ERROR);
+  }
+}
+
+function authMiddleware(req, res, next) {
+  const token = req.headers.authorization?.replace("Bearer ", "");
+
+  if (!token) {
+    res.sendStatus(STATUS_CODE.UNAUTHORIZED);
+    return;
+  }
+
+  next();
+}
+
+export { signUpMiddleware, signInMiddleware, authMiddleware };
 
 function checkErrors({ isBodyValid }) {
   const errors = [];
