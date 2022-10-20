@@ -1,6 +1,6 @@
 import { checkIfPostIsPostedByUser, deletePostData, updatePostData, insertPostData } from "../repositories/posts.repository.js";
 import { postSchema, postUpdateSchema } from "../schemas/postSchema.js";
-import { getUserById, getPostsByUser } from "../repositories/users.repository.js";
+import { getUserById, getPostsByUser, getAllPosts } from "../repositories/users.repository.js";
 
 async function updatePost (req, res) {
     const validation = postUpdateSchema.validate(req.body, { abortEarly: false });
@@ -85,9 +85,21 @@ async function postsByUser (req, res) {
     }
 }
 
+async function allPosts (req, res) {
+    try {
+
+        const posts = (await getAllPosts()).rows;
+
+        return res.status(200).send(posts);
+    } catch (error) {
+        return res.status(500).send(error.message);
+    }
+}
+
 export {
     updatePost,
     deletePost,
     createPost,
-    postsByUser
+    postsByUser,
+    allPosts
 }
