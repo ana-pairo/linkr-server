@@ -21,7 +21,7 @@ function getTrendPostsByTrendId (hashtagId) {
     return connection.query(
         `
             SELECT               
-                posts.*, users.username as "userName", users.picture as "userPhoto", COUNT(likes.id)
+                posts.*, users.username, users.picture as "userPhoto", COUNT(likes.id) AS likes
             FROM
                 posts_trends
             JOIN posts ON posts_trends."postId" = posts.id
@@ -38,7 +38,7 @@ function getPostTrendsByPostId (postId) {
     return connection.query(
         `
             SELECT
-                trends.name
+                trends.*
             FROM
                 posts_trends
             JOIN trends ON posts_trends."trendId" = trends.id
