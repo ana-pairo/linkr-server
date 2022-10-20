@@ -40,4 +40,11 @@ function getAllPosts () {
     );
 }
 
-export { getUserById, getPostsByUser, getAllPosts };
+function getUsersBySearch (search) {
+    return connection.query(
+        `SELECT * FROM users WHERE LOWER(username) LIKE $1;`,
+        [search.toLowerCase()+"%"]
+    );
+}
+
+export { getUserById, getPostsByUser, getAllPosts, getUsersBySearch };
