@@ -1,5 +1,6 @@
 import { checkIfPostIsPostedByUser, deletePostData, updatePostData, insertPostData } from "../repositories/posts.repository.js";
 import { postSchema, postUpdateSchema } from "../schemas/postSchema.js";
+import { getUserById, getPostsByUser } from "../repositories/users.repository.js";
 
 async function updatePost (req, res) {
     const validation = postUpdateSchema.validate(req.body, { abortEarly: false });
@@ -69,8 +70,24 @@ async function createPost (req, res) {
     } 
 }
 
+async function postsByUser (req, res) {
+    const { id } = req.params;
+
+    try {
+        const user = (await getUserById(id)).rows;
+        if (!user.length) return res.status(404).send('User not found');
+        
+        const posts = (await getPostsByUser(user[0].id)).rows;
+
+        return res.status(200).send(posts);
+    } catch (error) {
+        return res.status(500).send(error.message);
+    }
+}
+
 export {
     updatePost,
     deletePost,
-    createPost
+    createPost,
+    postsByUser
 }

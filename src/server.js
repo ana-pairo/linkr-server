@@ -5,6 +5,7 @@ import likesRouter from "./routers/likes.router.js";
 import postsRouter from "./routers/posts.router.js";
 import trendsRouter from "./routers/trends.router.js";
 import signRouter from "./routers/sign.router.js";
+import usersRouter from "./routers/users.router.js";
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ server.use(trendsRouter);
 server.use(postsRouter);
 server.use(likesRouter);
 server.use(signRouter);
+server.use(usersRouter);
 
 server.get("/status", (req, res) => {
   res.sendStatus(200);
