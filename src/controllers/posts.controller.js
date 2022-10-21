@@ -1,6 +1,7 @@
 import { checkIfPostIsPostedByUser, deletePostData, updatePostData, insertPostData } from "../repositories/posts.repository.js";
 import { postSchema, postUpdateSchema } from "../schemas/postSchema.js";
 import { getUserById, getPostsByUser, getAllPosts } from "../repositories/users.repository.js";
+import urlMetadata from 'url-metadata';
 
 async function updatePost (req, res) {
     const validation = postUpdateSchema.validate(req.body, { abortEarly: false });
@@ -9,8 +10,7 @@ async function updatePost (req, res) {
         return res.status(422).send(errors);
     }
     
-    const { postId } = res.locals;
-    const userId = 1; //TODO: Change to res.locals after authentication implementing middleware
+    const { postId, userId } = res.locals;
     const { newDescription, newTrends } = req.body;
 
     try {
@@ -26,8 +26,7 @@ async function updatePost (req, res) {
 }
 
 async function deletePost (req, res) {
-    const { postId } = res.locals;
-    const userId = 1; //TODO: Change to res.locals after authentication implementing middleware
+    const { postId, userId } = res.locals;
 
     try {
         const postCheck = (await checkIfPostIsPostedByUser(postId, userId));
@@ -59,7 +58,7 @@ async function createPost (req, res) {
         return res.status(422).send('URL inválida!');
     } 
 
-    const userId = 1; //res.locals.userId;
+    const { userId } = res.locals; 
 
     try {
         await insertPostData( userId, link, description, trends );
@@ -79,7 +78,13 @@ async function postsByUser (req, res) {
         
         const posts = (await getPostsByUser(user[0].id)).rows;
 
-        return res.status(200).send(posts);
+        const postsData = [];
+
+        for (let i = 0; i < posts.length; i ++) {
+            postsData.push(await InsertIntoPostDataUrlMetadata(posts[i]))
+        }
+
+        return res.status(200).send(postsData);
     } catch (error) {
         return res.status(500).send(error.message);
     }
@@ -88,12 +93,29 @@ async function postsByUser (req, res) {
 async function allPosts (req, res) {
     try {
 
-        const posts = (await getAllPosts()).rows;
+        let posts = (await getAllPosts()).rows;
 
-        return res.status(200).send(posts);
+        const postsData = [];
+
+        for (let i = 0; i < posts.length; i ++) {
+            postsData.push(await InsertIntoPostDataUrlMetadata(posts[i]))
+        }
+
+        return res.status(200).send(postsData);
     } catch (error) {
         return res.status(500).send(error.message);
     }
+}
+
+async function InsertIntoPostDataUrlMetadata (postData) {
+    const link = postData.link;
+    const metadata = await urlMetadata(link);
+    
+    postData.linkTitle = metadata.title;
+    postData.linkDescription = metadata.description;
+    postData.linkImage = metadata.image;
+
+    return postData
 }
 
 export {
@@ -101,5 +123,6 @@ export {
     deletePost,
     createPost,
     postsByUser,
-    allPosts
+    allPosts,
+    InsertIntoPostDataUrlMetadata
 }
