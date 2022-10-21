@@ -52,7 +52,7 @@ function listLikes (postId) {
     return connection.query(
         `
             SELECT 
-                users.username 
+                users.username, users.id as "userId"
             FROM 
                 likes
             JOIN users ON likes."userId" = users.id
