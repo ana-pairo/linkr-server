@@ -20,7 +20,8 @@
     "joi": "^17.6.3",
     "jsonwebtoken": "^8.5.1",
     "pg": "^8.8.0",
-    "string-strip-html": "^11.6.15"
+    "string-strip-html": "^11.6.15",
+    "url-metadata": "^2.5.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"

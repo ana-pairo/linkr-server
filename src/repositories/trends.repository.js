@@ -28,7 +28,7 @@ function getTrendPostsByTrendId (hashtagId) {
             JOIN users ON posts."userId" = users.id
             LEFT JOIN likes ON likes."postId" = posts.id
             WHERE posts_trends."trendId" = $1
-            GROUP BY posts.id, users.name, users.picture;
+            GROUP BY posts.id, users.username, users.picture LIMIT 20;
         `,
         [hashtagId]
     );

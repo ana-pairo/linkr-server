@@ -6,6 +6,7 @@ import postsRouter from "./routers/posts.router.js";
 import trendsRouter from "./routers/trends.router.js";
 import authRouter from "./routers/auth.router.js";
 import usersRouter from "./routers/users.router.js";
+import { authMiddleware } from "./middlewares/auth.middleware.js";
 
 dotenv.config();
 
@@ -13,10 +14,13 @@ const server = express();
 server.use(express.json());
 server.use(cors());
 
+server.use(authRouter);
+
+server.use(authMiddleware);
+
 server.use(trendsRouter);
 server.use(postsRouter);
 server.use(likesRouter);
-server.use(authRouter);
 server.use(usersRouter);
 
 server.get("/status", (req, res) => {

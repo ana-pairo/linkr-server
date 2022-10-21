@@ -1,8 +1,7 @@
 import { checkIfPostIsLikedByUser, deleteLike, insertLike, listLikes } from "../repositories/likes.repository.js";
 
 async function likePost (req, res) {
-    const { postId } = res.locals;
-    const userId = 1; //TODO: Change to res.locals after authentication implementing middleware
+    const { postId, userId } = res.locals;
 
     try {
         const likeCheck = (await checkIfPostIsLikedByUser(postId, userId));
@@ -17,8 +16,7 @@ async function likePost (req, res) {
 }
 
 async function unlikePost (req, res) {
-    const { postId } = res.locals;
-    const userId = 1; //TODO: Change to res.locals after authentication implementing middleware
+    const { postId, userId } = res.locals;
 
     try {
         const likeCheck = (await checkIfPostIsLikedByUser(postId, userId));

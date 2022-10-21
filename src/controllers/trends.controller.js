@@ -1,4 +1,5 @@
 import { getTrends, getHashtagId, getTrendPostsByTrendId, getPostTrendsByPostId } from "../repositories/trends.repository.js";
+import { InsertIntoPostDataUrlMetadata } from "./posts.controller.js";
 
 async function listTrends (req, res) {
     try {
@@ -16,11 +17,16 @@ async function listTrendPosts (req, res) {
     try {
         const trend = (await getHashtagId(hashtag)).rows;
         if (!trend.length) return res.status(404).send('Trend not found');
-        console.log(trend)
 
-        const trendPosts = (await getTrendPostsByTrendId(trend[0].id)).rows;
+        const posts = (await getTrendPostsByTrendId(trend[0].id)).rows;
 
-        return res.status(200).send(trendPosts);
+        const postsData = [];
+
+        for (let i = 0; i < posts.length; i ++) {
+            postsData.push(await InsertIntoPostDataUrlMetadata(posts[i]))
+        }
+
+        return res.status(200).send(postsData);
     } catch (error) {
         return res.status(500).send(error);
     }
