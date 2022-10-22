@@ -56,8 +56,7 @@ function listLikes (postId) {
             FROM 
                 likes
             JOIN users ON likes."userId" = users.id
-            WHERE likes."postId" = $1
-            GROUP BY users.username;
+            WHERE likes."postId" = $1;
         `,
         [postId]
     );
