@@ -28,10 +28,9 @@ function getAllPosts () {
     return connection.query(
         `
             SELECT               
-                posts.*, users.username, users.picture as "userPhoto", COUNT(likes.id) AS likes
+            posts.*, users.username, users.picture as "userPhoto", COUNT(likes.id) AS likes
             FROM
-                posts_trends
-            JOIN posts ON posts_trends."postId" = posts.id
+            posts
             JOIN users ON posts."userId" = users.id
             LEFT JOIN likes ON likes."postId" = posts.id
             GROUP BY posts.id, users.username, users.picture
