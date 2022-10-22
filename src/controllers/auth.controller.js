@@ -27,6 +27,7 @@ async function signIn(req, res) {
   const { password } = req.body;
   const userId = user.id;
   const picture = user.picture;
+  const username = user.username;
 
   const token = jwt.sign(
     {
@@ -42,7 +43,7 @@ async function signIn(req, res) {
     if (bcrypt.compareSync(password, user.password)) {
       await openSession({ token, userId });
 
-      res.status(STATUS_CODE.OK).send({ token, picture, userId });
+      res.status(STATUS_CODE.OK).send({ token, picture, userId, username });
     } else {
       res.sendStatus(STATUS_CODE.UNAUTHORIZED);
     }
