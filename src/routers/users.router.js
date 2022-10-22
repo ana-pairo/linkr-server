@@ -6,6 +6,6 @@ const router = express.Router();
 
 router.get('/user/:id', postsByUser);
 router.get('/timeline', allPosts);
-router.post('/user/search/:search', searchUser);
+router.get('/user/search/:search', searchUser);
 
 export default router;
