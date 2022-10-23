@@ -9,7 +9,7 @@ function getTrends () {
                 posts_trends 
             JOIN trends ON "trendId" = trends.id
             GROUP BY posts_trends."trendId", trends.name 
-            ORDER BY quant DESC;
+            ORDER BY quant DESC LIMIT 10;
         `
     );
 }
