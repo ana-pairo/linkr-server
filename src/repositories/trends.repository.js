@@ -1,7 +1,17 @@
 import connection from "../db/db.js";
 
 function getTrends () {
-    return connection.query(`SELECT * FROM trends;`);
+    return connection.query(
+        `
+            SELECT 
+                posts_trends."trendId" AS id, trends.name, COUNT(posts_trends."trendId") AS quant 
+            FROM 
+                posts_trends 
+            JOIN trends ON "trendId" = trends.id
+            GROUP BY posts_trends."trendId", trends.name 
+            ORDER BY quant DESC;
+        `
+    );
 }
 
 function getHashtagId (hashtag) {
