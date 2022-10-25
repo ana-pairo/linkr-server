@@ -2,9 +2,6 @@ import { checkIfPostIsPostedByUser, deletePostData, updatePostData, insertPostDa
 import { postSchema, postUpdateSchema } from "../schemas/postSchema.js";
 import { getUserById, getPostsByUser, getAllPosts } from "../repositories/users.repository.js";
 import urlMetadata from 'url-metadata';
-import { STATUS_CODE } from "../enums/statusCode.js";
-import { getPostById } from "../repositories/likes.repository.js";
-import { getPostTrendsByPostId } from "../repositories/trends.repository.js";
 
 async function updatePost (req, res) {
     const validation = postUpdateSchema.validate(req.body, { abortEarly: false });
@@ -121,29 +118,11 @@ async function InsertIntoPostDataUrlMetadata (postData) {
     return postData
 }
 
-async function sharePost (req, res) {
-    const { postId, userId } = res.locals;
-
-    try {
-        const postData = (await getPostById(postId)).rows[0];
-        let postTrends = (await getPostTrendsByPostId(postId)).rows;
-        postTrends = postTrends.map(trendObj => trendObj.name);
-
-        await insertPostData(userId, postData.link, postData.description, postTrends, postId)
-
-        return res.sendStatus(STATUS_CODE.CREATED)      
-    } catch (error) {
-        return res.status(STATUS_CODE.SERVER_ERROR).send(error.message);
-    }
-
-}
-
 export {
     updatePost,
     deletePost,
     createPost,
     postsByUser,
     allPosts,
-    InsertIntoPostDataUrlMetadata,
-    sharePost
+    InsertIntoPostDataUrlMetadata
 }
