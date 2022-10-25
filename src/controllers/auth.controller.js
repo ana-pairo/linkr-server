@@ -8,8 +8,7 @@ import { insertUser, openSession } from "../repositories/auth.repository.js";
 import { STATUS_CODE } from "../enums/statusCode.js";
 
 async function signUp(req, res) {
-  const { username } = res.locals;
-  const { email, password, picture } = req.body;
+  const { email, password, picture, username } = req.body;
 
   const passwordHash = bcrypt.hashSync(password, 12);
 
