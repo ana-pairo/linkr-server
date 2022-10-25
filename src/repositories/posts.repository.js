@@ -110,22 +110,22 @@ async function deletePostData (postId) {
     return;
 }
 
-async function insertPostData ( userId, link, description, trends ) {
-    const postId = await insertPost(userId, link, description);
+async function insertPostData ( userId, link, description, trends, originalId = null ) {
+    const postId = await insertPost(userId, link, description, originalId);
     updatePostTrends(postId, trends);
 
     return;
 }
 
-async function insertPost (userId, link, description) {
+async function insertPost (userId, link, description, originalId) {
     await connection.query(
         `
             INSERT INTO posts 
-                (link, description, "userId") 
+                (link, description, "userId", "originalId") 
             VALUES 
-                ($1, $2, $3);  
+                ($1, $2, $3, $4);  
         `,
-        [link, description, userId]
+        [link, description, userId, originalId]
     );
     const postId = await connection.query(
         `
@@ -137,4 +137,4 @@ async function insertPost (userId, link, description) {
     return postId.rows[0].max;
 }
 
-export { checkIfPostIsPostedByUser, deletePostData, updatePostData, insertPostData };
+export { checkIfPostIsPostedByUser, deletePostData, updatePostData, insertPostData, insertPost };
