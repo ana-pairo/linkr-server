@@ -14,6 +14,20 @@ async function checkIfEmailIsValid({ email }) {
   );
 }
 
+async function checkIfNameIsValid({ username }) {
+  return connection.query(
+    `
+      SELECT 
+          *
+      FROM 
+          users 
+      WHERE 
+          username = $1;
+    `,
+    [username]
+  );
+}
+
 async function insertUser({ username, email, passwordHash, picture }) {
   return connection.query(
     `
@@ -37,4 +51,4 @@ async function openSession({ token, userId }) {
   );
 }
 
-export { checkIfEmailIsValid, insertUser, openSession };
+export { checkIfEmailIsValid, insertUser, openSession, checkIfNameIsValid };

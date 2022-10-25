@@ -5,7 +5,10 @@ dotenv.config();
 
 import { STATUS_CODE } from "../enums/statusCode.js";
 import { signUpSCHEMA, signInSCHEMA } from "../schemas/authSchema.js";
-import { checkIfEmailIsValid } from "../repositories/auth.repository.js";
+import {
+  checkIfEmailIsValid,
+  checkIfNameIsValid,
+} from "../repositories/auth.repository.js";
 
 async function signUpMiddleware(req, res, next) {
   if (!req.body) {
@@ -44,19 +47,17 @@ async function signUpMiddleware(req, res, next) {
     return;
   }
 
-  const arrayName = username.split(" ");
+  try {
+    const isNameRepited = (await checkIfNameIsValid({ username })).rows[0];
 
-  if (arrayName.length > 0) {
-    for (let i = 0; i < arrayName.length; i++) {
-      arrayName[i] =
-        arrayName[i].charAt(0).toUpperCase() + arrayName[i].slice(1);
+    if (isNameRepited) {
+      res.status(STATUS_CODE.CONFLICT).send("This username is not available");
+
+      return;
     }
-
-    const treatedName = arrayName.join(" ");
-
-    res.locals.username = treatedName;
-  } else {
-    res.locals.username = username;
+  } catch (error) {
+    res.sendStatus(STATUS_CODE.SERVER_ERROR);
+    return;
   }
 
   next();
