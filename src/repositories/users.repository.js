@@ -24,7 +24,7 @@ function getPostsByUser (userId) {
     );
 }
 
-function getAllPosts () {
+function getAllPosts (number) {
     return connection.query(
         `
             SELECT
@@ -34,10 +34,26 @@ function getAllPosts () {
             JOIN users ON posts."userId" = users.id
             LEFT JOIN likes ON likes."postId" = posts.id
             GROUP BY posts.id, users.username, users.picture
-            ORDER BY id DESC LIMIT 20;
+            ORDER BY id DESC LIMIT $1;
+        `,
+        [number*10]
+    );
+}
+
+function getQuantPosts () { // Ana... Tem q mudar aqui tbm :)
+    return connection.query(
+        `
+        SELECT               
+        COUNT(posts.id) As quant
+        FROM
+        posts
+        JOIN users ON posts."userId" = users.id
+        LEFT JOIN likes ON likes."postId" = posts.id
+        GROUP BY posts.id, users.username, users.picture;
         `
     );
 }
+
 
 function getUsersBySearch (search) {
     return connection.query(

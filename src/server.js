@@ -8,6 +8,7 @@ import authRouter from "./routers/auth.router.js";
 import usersRouter from "./routers/users.router.js";
 import followRouter from "./routers/follow.router.js";
 import sharesRouter from "./routers/shares.router.js";
+import commentsRouter from "./routers/comments.router.js";
 import { authMiddleware } from "./middlewares/auth.middleware.js";
 
 dotenv.config();
@@ -26,6 +27,7 @@ server.use(likesRouter);
 server.use(usersRouter);
 server.use(followRouter);
 server.use(sharesRouter);
+server.use(commentsRouter);
 
 server.get("/status", (req, res) => {
   res.sendStatus(200);
