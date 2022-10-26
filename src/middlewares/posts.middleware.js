@@ -6,7 +6,9 @@ async function validatePostId (req, res, next) {
     try {
         const postExists = (await getPostById(postId)).rows;
         if (!postExists.length) return res.status(404).send('Post does not exist');
-        res.locals.postId = postExists[0].id;
+
+        res.locals.postId = postId;
+        res.locals.postExists = postExists;
 
         next();
     } catch (error) {
@@ -14,4 +16,17 @@ async function validatePostId (req, res, next) {
     }
 }
 
-export { validatePostId };
+function getOriginalPostId (req, res, next) {
+    const { postExists, postId } = res.locals;
+
+    let referencePostId;
+    postExists[0].originalId ? 
+        referencePostId = postExists[0].originalId : 
+        referencePostId = postId;
+
+    res.locals.postId = referencePostId;
+
+    next();
+}
+
+export { validatePostId, getOriginalPostId };
