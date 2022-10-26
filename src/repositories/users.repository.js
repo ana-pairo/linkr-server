@@ -76,4 +76,4 @@ function getUserDataByPostId (postId) {
     );
 }
 
-export { getUserById, getPostsByUser, getAllPosts, getUsersBySearch, getUserDataByPostId };
+export { getUserById, getPostsByUser, getAllPosts, getUsersBySearch, getUserDataByPostId, getQuantPosts };

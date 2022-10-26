@@ -1,9 +1,7 @@
 import express from 'express';
-import { postsByUser, allPosts } from '../controllers/posts.controller.js';
 import { getUserDataByOriginalPostId, searchUser } from '../controllers/users.controller.js';
 import { getOriginalPostId, validatePostId } from '../middlewares/posts.middleware.js';
 import { postsByUser, allPosts, quantPosts } from '../controllers/posts.controller.js';
-import { searchUser } from '../controllers/users.controller.js';
 
 const router = express.Router();
 
