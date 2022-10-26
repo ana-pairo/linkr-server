@@ -1,6 +1,6 @@
 import { checkIfPostIsPostedByUser, deletePostData, updatePostData, insertPostData } from "../repositories/posts.repository.js";
 import { postSchema, postUpdateSchema } from "../schemas/postSchema.js";
-import { getUserById, getPostsByUser, getAllPosts } from "../repositories/users.repository.js";
+import { getUserById, getPostsByUser, getAllPosts, getQuantPosts } from "../repositories/users.repository.js";
 import urlMetadata from 'url-metadata';
 
 async function updatePost (req, res) {
@@ -91,9 +91,13 @@ async function postsByUser (req, res) {
 }
 
 async function allPosts (req, res) {
+    const { number } = req.params;
+
+    if (isNaN(number)) return res.status(400).send('Not a number');
+
     try {
 
-        let posts = (await getAllPosts()).rows;
+        let posts = (await getAllPosts(number)).rows;
 
         const postsData = [];
 
@@ -102,6 +106,17 @@ async function allPosts (req, res) {
         }
 
         return res.status(200).send(postsData);
+    } catch (error) {
+        return res.status(500).send(error.message);
+    }
+}
+
+async function quantPosts (req, res) {
+    try {
+
+        let posts = (await getQuantPosts()).rows;
+
+        return res.status(200).send(posts[0].quant);
     } catch (error) {
         return res.status(500).send(error.message);
     }
@@ -124,5 +139,6 @@ export {
     createPost,
     postsByUser,
     allPosts,
-    InsertIntoPostDataUrlMetadata
+    InsertIntoPostDataUrlMetadata, 
+    quantPosts
 }
