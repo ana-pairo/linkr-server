@@ -66,6 +66,7 @@ async function signUpMiddleware(req, res, next) {
 async function signInMiddleware(req, res, next) {
   if (!req.body) {
     res.sendStatus(STATUS_CODE.BAD_REQUEST);
+    return;
   }
 
   const isBodyValid = signInSCHEMA.validate(req.body, { abortEarly: false });
