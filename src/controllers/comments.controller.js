@@ -3,7 +3,6 @@ import { getTotalPostCommentsByPostId } from "../repositories/comments.repositor
 
 async function getTotalPostComments(req, res) {
   const { postId } = res.locals;
-
   try {
     const totalComments = (await getTotalPostCommentsByPostId(postId)).rows[0]
       .totalComments;
