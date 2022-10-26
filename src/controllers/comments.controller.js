@@ -1,16 +1,15 @@
 import { STATUS_CODE } from "../enums/statusCode.js";
 import { getTotalPostCommentsByPostId } from "../repositories/comments.repository.js";
 
-async function getTotalPostComments(req, res) {
+async function getComments(req, res) {
   const { postId } = res.locals;
   try {
-    const totalComments = (await getTotalPostCommentsByPostId(postId)).rows[0]
-      .totalComments;
+    const comments = await getTotalPostCommentsByPostId(postId);
 
-    return res.status(STATUS_CODE.OK).send(totalComments);
+    return res.status(STATUS_CODE.OK).send(comments.rows);
   } catch (error) {
     return res.status(STATUS_CODE.SERVER_ERROR).send(error.message);
   }
 }
 
-export { getTotalPostComments };
+export { getComments };

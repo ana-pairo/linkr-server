@@ -3,7 +3,18 @@ import connection from "../db/db.js";
 function getTotalPostCommentsByPostId(postId) {
   return connection.query(
     `
-        SELECT COUNT(id) AS "totalComments" FROM comments WHERE "postId" = $1;
+      SELECT 
+        comments.*, 
+        users.username, 
+        users.picture 
+      FROM 
+        comments 
+      JOIN 
+        users 
+      ON 
+        comments."userId" = users.id 
+      WHERE "postId" = $1;
+
     `,
     [postId]
   );
