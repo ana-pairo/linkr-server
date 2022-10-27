@@ -35,29 +35,57 @@ function getAllFollowingUsers({ userId }) {
   );
 }
 
+// function getAllPosts({ userId, number }) {
+//   return connection.query(
+//     `
+//         SELECT
+//             posts.*, users.username, users.picture as "userPhoto", COUNT(likes.id) AS likes
+//         FROM
+//             posts
+//         JOIN
+//             follows ON "userId" = "followedId"
+//         JOIN
+//             users ON posts."userId" = users.id
+//         LEFT JOIN
+//             likes ON likes."postId" = posts.id
+//         WHERE
+//             "followerId" = $1
+//         GROUP BY
+//             posts.id, users.username, users.picture
+//         ORDER BY
+//             posts.id DESC LIMIT $2;
+//     `,
+//     [userId, number * 10]
+//   );
+// }
+
+// GET ALL POSTS COM POSTS DO PROPRIO USUARIO
+
 function getAllPosts({ userId, number }) {
   return connection.query(
     `
-        SELECT 
-            posts.*, users.username, users.picture as "userPhoto", COUNT(likes.id) AS likes
-        FROM 
-            posts
-        JOIN 
-            follows ON "userId" = "followedId"
-        JOIN 
-            users ON posts."userId" = users.id
-        LEFT JOIN 
-            likes ON likes."postId" = posts.id
-        WHERE 
-            "followerId" = $1
-        GROUP BY 
-            posts.id, users.username, users.picture
-        ORDER BY 
-            posts.id DESC LIMIT $2;
+    SELECT
+    posts.*, users.username, users.picture as "userPhoto", COUNT(likes.id) AS likes FROM posts
+    LEFT JOIN
+    follows ON "userId" = "followedId"
+    LEFT JOIN
+    likes ON likes."postId" = posts.id
+    JOIN
+    users ON posts."userId" = users.id
+    WHERE
+    posts."userId" = $1
+    OR
+    follows."followerId" = $1
+    GROUP BY
+    posts.id, users.username, users.picture
+    ORDER BY
+    posts.id DESC LIMIT $2;
     `,
     [userId, number * 10]
   );
 }
+
+// GET ALL POSTS COM POSTS DO PROPRIO USUARIO
 
 function getQuantPosts() {
   // Ana... Tem q mudar aqui tbm :)
