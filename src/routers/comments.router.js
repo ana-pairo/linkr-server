@@ -1,5 +1,5 @@
 import express from "express";
-import { getComments } from "../controllers/comments.controller.js";
+import { getComments, postComments } from "../controllers/comments.controller.js";
 import {
   getOriginalPostId,
   validatePostId,
@@ -7,6 +7,7 @@ import {
 
 const router = express.Router();
 
+router.post("/comments/:postId", validatePostId, getOriginalPostId, postComments);
 router.get("/comments/:postId", validatePostId, getOriginalPostId, getComments);
 
 export default router;

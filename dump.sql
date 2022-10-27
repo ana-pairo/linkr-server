@@ -21,6 +21,69 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: comments; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.comments (
+    id integer NOT NULL,
+    "postId" integer NOT NULL,
+    "userId" integer NOT NULL,
+    description text NOT NULL
+);
+
+
+--
+-- Name: comments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.comments_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: comments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.comments_id_seq OWNED BY public.comments.id;
+
+
+--
+-- Name: follows; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.follows (
+    id integer NOT NULL,
+    "followerId" integer NOT NULL,
+    "followedId" integer NOT NULL
+);
+
+
+--
+-- Name: follows_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.follows_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: follows_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.follows_id_seq OWNED BY public.follows.id;
+
+
+--
 -- Name: likes; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -59,7 +122,8 @@ CREATE TABLE public.posts (
     id integer NOT NULL,
     "userId" integer NOT NULL,
     link text NOT NULL,
-    description text
+    description text,
+    "originalId" integer
 );
 
 
@@ -210,6 +274,20 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
+-- Name: comments id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.comments ALTER COLUMN id SET DEFAULT nextval('public.comments_id_seq'::regclass);
+
+
+--
+-- Name: follows id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.follows ALTER COLUMN id SET DEFAULT nextval('public.follows_id_seq'::regclass);
+
+
+--
 -- Name: likes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -252,174 +330,170 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 
 --
+-- Data for Name: comments; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO public.comments VALUES (1, 1, 3, 'Que legal');
+INSERT INTO public.comments VALUES (2, 1, 2, 'comentario pra testar delete');
+
+
+--
+-- Data for Name: follows; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO public.follows VALUES (1, 2, 1);
+INSERT INTO public.follows VALUES (3, 4, 1);
+INSERT INTO public.follows VALUES (4, 5, 6);
+INSERT INTO public.follows VALUES (5, 6, 1);
+INSERT INTO public.follows VALUES (6, 8, 6);
+
+
+--
 -- Data for Name: likes; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.likes VALUES (11, 4, 2);
-INSERT INTO public.likes VALUES (14, 2, 2);
-INSERT INTO public.likes VALUES (16, 7, 2);
-INSERT INTO public.likes VALUES (17, 7, 1);
-INSERT INTO public.likes VALUES (18, 4, 1);
-INSERT INTO public.likes VALUES (24, 4, 3);
-INSERT INTO public.likes VALUES (26, 6, 3);
-INSERT INTO public.likes VALUES (29, 14, 5);
-INSERT INTO public.likes VALUES (30, 11, 5);
-INSERT INTO public.likes VALUES (31, 9, 5);
-INSERT INTO public.likes VALUES (32, 5, 5);
-INSERT INTO public.likes VALUES (33, 4, 4);
-INSERT INTO public.likes VALUES (34, 16, 5);
-INSERT INTO public.likes VALUES (35, 5, 1);
-INSERT INTO public.likes VALUES (36, 15, 1);
-INSERT INTO public.likes VALUES (37, 9, 1);
+INSERT INTO public.likes VALUES (1, 2, 2);
+INSERT INTO public.likes VALUES (2, 3, 4);
+INSERT INTO public.likes VALUES (3, 6, 5);
 
 
 --
 -- Data for Name: posts; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.posts VALUES (3, 2, 'https://pt-br.reactjs.org/', '#react 2 a');
-INSERT INTO public.posts VALUES (4, 2, 'https://pt-br.reactjs.org/', '#react 3');
-INSERT INTO public.posts VALUES (5, 2, 'https://pt-br.reactjs.org/', '#react 4');
-INSERT INTO public.posts VALUES (2, 2, 'https://pt-br.reactjs.org/', '#react 1');
-INSERT INTO public.posts VALUES (6, 2, 'https://pt-br.reactjs.org/', '#react 5');
-INSERT INTO public.posts VALUES (7, 3, 'https://pt-br.reactjs.org/', 'Olha que legal #react #developer #software');
-INSERT INTO public.posts VALUES (9, 3, 'https://tecnoblog.net/noticias/2022/03/17/protestware-desenvolvedor-sabota-projeto-com-mensagem-de-paz-para-ucrania/', 'Notiicia aqui #news');
-INSERT INTO public.posts VALUES (11, 3, 'https://tecnoblog.net/noticias/2022/10/13/netflix-trara-plano-basico-com-anuncios-ao-brasil-para-competir-com-tv-aberta/', '#netflix');
-INSERT INTO public.posts VALUES (12, 3, 'https://tecnoblog.net/noticias/2022/10/11/demorou-mas-o-youtube-vai-finalmente-oferecer-nomes-de-usuarios-unicos/', '@news');
-INSERT INTO public.posts VALUES (13, 3, 'https://tecnoblog.net/noticias/2022/10/12/google-docs-consegue-transcrever-as-chamadas-do-meet-mas-so-em-ingles/', '#news #noticia');
-INSERT INTO public.posts VALUES (14, 4, 'http://youtube.com', 'Site de vídeos maneiro... não sei se vcs conhecem... #novidade');
-INSERT INTO public.posts VALUES (15, 5, 'https://tecnoblog.net/noticias/2022/10/11/demorou-mas-o-youtube-vai-finalmente-oferecer-nomes-de-usuarios-unicos/', 'Será será será #news');
-INSERT INTO public.posts VALUES (16, 4, 'http://youtube.com', '#show #isso #calvo #seila #tmj #bora ');
-INSERT INTO public.posts VALUES (17, 5, 'https://www.uol.com.br/nossa/noticias/redacao/2022/07/15/calvao-de-cria-corte-de-cabelo-para-ficar-calvo-viraliza-entre-os-jovens.htm', '#calvo é a moda');
-INSERT INTO public.posts VALUES (18, 5, 'https://www.techtudo.com.br/dicas-e-tutoriais/2022/08/calvo-de-cria-filtro-simula-corte-de-cabelo-masculino-saiba-usar.ghtml', 'Abaixo a ditadura do cabelo #calvo #news');
-INSERT INTO public.posts VALUES (19, 4, 'https://www.campograndenews.com.br/colunistas/em-pauta/nao-tolero-ser-calvo-o-cabelo-e-a-grande-obsessao-masculina', 'Até quando Brasil? #calvofobia #calvo Em pleno 2022...');
+INSERT INTO public.posts VALUES (1, 1, 'https://gauchazh.clicrbs.com.br/educacao-e-emprego/conteudo-publicitario/2022/10/curso-de-medicina-se-destaca-por-uso-de-tecnologia-e-relacao-com-a-comunidade-cl9msyshn002m014ujx07z7ae.html', '#news kk', NULL);
+INSERT INTO public.posts VALUES (2, 1, 'https://odia.ig.com.br/volta-redonda/2022/10/6511896-inscricoes-para-o-projovem-urbano-vao-ate-a-proxima-segunda-feira-31.html', '#news k', NULL);
+INSERT INTO public.posts VALUES (3, 2, 'https://www.cnnbrasil.com.br/politica/exonerado-do-tse-servidor-procura-pf-e-diz-ter-informado-tribunal-sobre-falhas-de-fiscalizacao-em-insercoes/', '#news #noticias', NULL);
+INSERT INTO public.posts VALUES (5, 4, 'https://www.poder360.com.br/economia/banco-central-mantem-taxa-selic-em-1375/', '#noticias #noticias #noticias #noticias #noticias #noticias
+ ', NULL);
+INSERT INTO public.posts VALUES (6, 6, 'http://facebook.com', 'Agora foi :)) #nuncaDesista', NULL);
+INSERT INTO public.posts VALUES (7, 6, 'http://youtube.com', 'ewfewf #funfaPF', NULL);
+INSERT INTO public.posts VALUES (8, 6, 'http://facebook.com', 'werewr', NULL);
 
 
 --
 -- Data for Name: posts_trends; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.posts_trends VALUES (22, 1, 3);
-INSERT INTO public.posts_trends VALUES (23, 1, 4);
-INSERT INTO public.posts_trends VALUES (24, 1, 5);
-INSERT INTO public.posts_trends VALUES (26, 1, 2);
-INSERT INTO public.posts_trends VALUES (27, 1, 6);
-INSERT INTO public.posts_trends VALUES (28, 1, 7);
-INSERT INTO public.posts_trends VALUES (29, 6, 7);
-INSERT INTO public.posts_trends VALUES (30, 7, 7);
-INSERT INTO public.posts_trends VALUES (35, 9, 9);
-INSERT INTO public.posts_trends VALUES (37, 11, 11);
-INSERT INTO public.posts_trends VALUES (38, 9, 13);
-INSERT INTO public.posts_trends VALUES (39, 12, 13);
-INSERT INTO public.posts_trends VALUES (40, 13, 14);
-INSERT INTO public.posts_trends VALUES (41, 9, 15);
-INSERT INTO public.posts_trends VALUES (42, 14, 16);
-INSERT INTO public.posts_trends VALUES (43, 15, 16);
-INSERT INTO public.posts_trends VALUES (44, 16, 16);
-INSERT INTO public.posts_trends VALUES (45, 17, 16);
-INSERT INTO public.posts_trends VALUES (46, 18, 16);
-INSERT INTO public.posts_trends VALUES (47, 19, 16);
-INSERT INTO public.posts_trends VALUES (48, 16, 17);
-INSERT INTO public.posts_trends VALUES (49, 16, 18);
-INSERT INTO public.posts_trends VALUES (50, 9, 18);
-INSERT INTO public.posts_trends VALUES (51, 20, 19);
-INSERT INTO public.posts_trends VALUES (52, 16, 19);
+INSERT INTO public.posts_trends VALUES (1, 1, 1);
+INSERT INTO public.posts_trends VALUES (2, 1, 2);
+INSERT INTO public.posts_trends VALUES (3, 1, 3);
+INSERT INTO public.posts_trends VALUES (4, 2, 3);
+INSERT INTO public.posts_trends VALUES (9, 2, 5);
+INSERT INTO public.posts_trends VALUES (10, 2, 5);
+INSERT INTO public.posts_trends VALUES (11, 2, 5);
+INSERT INTO public.posts_trends VALUES (12, 2, 5);
+INSERT INTO public.posts_trends VALUES (13, 2, 5);
+INSERT INTO public.posts_trends VALUES (14, 4, 5);
+INSERT INTO public.posts_trends VALUES (15, 5, 6);
+INSERT INTO public.posts_trends VALUES (16, 6, 7);
 
 
 --
 -- Data for Name: sessions; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.sessions VALUES (1, 1, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2NjUyNjIxNCwiZXhwIjoxNjY2NTMzNDE0fQ.xuiAvDByNEYMOaV8acdXV4o4LBq295C3S_5x1W9FrfU', '2022-10-23 11:56:54.895642');
-INSERT INTO public.sessions VALUES (2, 1, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2NjUyNjM3NywiZXhwIjoxNjY2NTMzNTc3fQ.eC8pbVpJdHjCqBneLq3bg_prnTUqqClliq_QXtBHJmw', '2022-10-23 11:59:38.364172');
-INSERT INTO public.sessions VALUES (3, 2, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTY2NjUyNjQyNSwiZXhwIjoxNjY2NTMzNjI1fQ.wqnH8OqVigikSrb7KReNi1T5CN5-OzDOuJ5g2i_srEc', '2022-10-23 12:00:26.527308');
-INSERT INTO public.sessions VALUES (4, 1, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2NjU2MzI5NywiZXhwIjoxNjY2NTcwNDk3fQ.3oKua4PuxNiOTFFrHm09RMFS58mjuc0Ff64Z-bk6kFU', '2022-10-23 22:14:57.454939');
-INSERT INTO public.sessions VALUES (5, 1, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2NjU2NDQ4MiwiZXhwIjoxNjY2NTcxNjgyfQ.xG5w4sXrrjN12_LWBTG4YQS8CkBHNJ-x1SjMYWOLtjk', '2022-10-23 22:34:42.761849');
-INSERT INTO public.sessions VALUES (6, 2, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTY2NjU2NDY0NCwiZXhwIjoxNjY2NTcxODQ0fQ.nj1JsYq-slra5Iq4EDt5nECzpNxU402g__dN6ltbx3Q', '2022-10-23 22:37:24.847269');
-INSERT INTO public.sessions VALUES (7, 3, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsImlhdCI6MTY2NjU2NTU2OSwiZXhwIjoxNjY2NTcyNzY5fQ.rfG10axH9n1vx8pwQfIAAN3imlw917SuBAMbfY3pXH4', '2022-10-23 22:52:49.764524');
-INSERT INTO public.sessions VALUES (8, 2, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTY2NjU2NTYyNiwiZXhwIjoxNjY2NTcyODI2fQ.ZQ4C-OguvpRZjWCgsdl5zt7Qx9-yIYgtcOnd9PKwi48', '2022-10-23 22:53:47.151693');
-INSERT INTO public.sessions VALUES (9, 1, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2NjU2NTcxNywiZXhwIjoxNjY2NTcyOTE3fQ.YOJlS4_5Q-RsoIOT-LeYoCmpROFcuJ7poJlFoLLd5To', '2022-10-23 22:55:17.874037');
-INSERT INTO public.sessions VALUES (10, 4, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsImlhdCI6MTY2NjU2Njc0NiwiZXhwIjoxNjY2NTczOTQ2fQ.1whttq2XsV7FDlcvdHxuk-uWuSBIBYBoVyM3O7SJkJg', '2022-10-23 23:12:27.141418');
-INSERT INTO public.sessions VALUES (11, 5, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsImlhdCI6MTY2NjU2Njg0OSwiZXhwIjoxNjY2NTc0MDQ5fQ.FrzDb73UTyk2DDm0j0nZblJRjSwx5HtCXR0CiZUosgk', '2022-10-23 23:14:09.641199');
-INSERT INTO public.sessions VALUES (12, 4, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsImlhdCI6MTY2NjU3MDc1MSwiZXhwIjoxNjY2NTc3OTUxfQ.B3WArgMc9PJS9xGEb-SjAfUOx_yUu-VUlGZyIl-sw7w', '2022-10-24 00:19:12.125156');
-INSERT INTO public.sessions VALUES (13, 1, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2NjU3MjA3NCwiZXhwIjoxNjY2NTc5Mjc0fQ.Sx9ngAdVrCRTG9rCd3hX1ppvXtRxj1y9fit9UHQ47po', '2022-10-24 00:41:14.398758');
-INSERT INTO public.sessions VALUES (14, 4, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsImlhdCI6MTY2NjU3NzEwNCwiZXhwIjoxNjY2NTg0MzA0fQ.OF7mbkc3uF6eBSvNXSGpoUJ37HL8yo7IzENZbVWa-es', '2022-10-24 02:05:04.872913');
-INSERT INTO public.sessions VALUES (15, 6, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYsImlhdCI6MTY2NjYxNjczNCwiZXhwIjoxNjY2NjIzOTM0fQ.BXHsAFdFfYtlAm74aT-eqRleIHACjjezR86ij21YzD4', '2022-10-24 13:05:34.834704');
+INSERT INTO public.sessions VALUES (1, 1, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2NjcxODg4MCwiZXhwIjoxNjY2NzI2MDgwfQ.Kn0K5qPS2I57Iv1TVzIXmZBJsHjEULH3W9Q9IRyRj3g', '2022-10-25 17:28:01.031787');
+INSERT INTO public.sessions VALUES (2, 2, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTY2NjcxOTAwMSwiZXhwIjoxNjY2NzI2MjAxfQ.UfjZZ2dkQ8IM5s9Kref0hbgmGsvYcFsKF0_FJRaauJA', '2022-10-25 17:30:01.840422');
+INSERT INTO public.sessions VALUES (3, 1, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2NjcxOTA5MSwiZXhwIjoxNjY2NzI2MjkxfQ.S2W6lfKtzcqcd52lHTk8fBeoiTlxL4gcLaHrVX-0_ms', '2022-10-25 17:31:31.335367');
+INSERT INTO public.sessions VALUES (4, 2, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTY2NjcyMjgzMSwiZXhwIjoxNjY2NzMwMDMxfQ.zBcgGATzrYVeFz_iO0jQx74DDL5_HkoFNLg0aSjIQEo', '2022-10-25 18:33:52.102036');
+INSERT INTO public.sessions VALUES (5, 1, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2NjczNTQ4MiwiZXhwIjoxNjY2NzQyNjgyfQ.NbgFCK3nuZ12bHTPIO3CtTGK5DMUOgNKkCQyntieXR4', '2022-10-25 22:04:42.408753');
+INSERT INTO public.sessions VALUES (6, 3, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsImlhdCI6MTY2Njc4NjA5NywiZXhwIjoxNjY2NzkzMjk3fQ.71HHYnQ9s3TZgJnlg0F2ax86P6zM0iTotDoQJlzcGPc', '2022-10-26 12:08:17.831974');
+INSERT INTO public.sessions VALUES (7, 1, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2Njc4NjIxNywiZXhwIjoxNjY2NzkzNDE3fQ.SZwZ-mwNkGAtR5f1op4l8_IDdvER8D8iUY3NHMYJnoc', '2022-10-26 12:10:17.975187');
+INSERT INTO public.sessions VALUES (8, 1, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2Njc4ODM3NSwiZXhwIjoxNjY2Nzk1NTc1fQ.NFofq6SLxGMe32gfUi_iD2ekV_6CgkTKMJ_lELMYt9E', '2022-10-26 12:46:15.819581');
+INSERT INTO public.sessions VALUES (9, 1, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2Njc4OTEyMiwiZXhwIjoxNjY2Nzk2MzIyfQ.ReSPa5ilmIP1uj4ccgQ0eXw7ssn-JNadTA02Pwfvkb0', '2022-10-26 12:58:42.904556');
+INSERT INTO public.sessions VALUES (10, 3, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsImlhdCI6MTY2Njc5MDc3OCwiZXhwIjoxNjY2Nzk3OTc4fQ.6uL--s_AJApvZnqCXrvfmFTyOXeqfK0GvskY6FJ7uFs', '2022-10-26 13:26:18.932495');
+INSERT INTO public.sessions VALUES (11, 1, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2Njc5MTI4MiwiZXhwIjoxNjY2Nzk4NDgyfQ.h77G9I38iblBViyVbtMHvoDIQ3jdXiiP1RlFrDP472Y', '2022-10-26 13:34:42.286015');
+INSERT INTO public.sessions VALUES (12, 2, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTY2NjgwMjEzMSwiZXhwIjoxNjY2ODA5MzMxfQ.Ul-Bi4f99LuuGOHZPZiHY0VI9UAKmmJPMSGz7WR_GpA', '2022-10-26 16:35:31.305942');
+INSERT INTO public.sessions VALUES (13, 4, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsImlhdCI6MTY2NjgyMDQ0MCwiZXhwIjoxNjY2ODI3NjQwfQ.UtI-Jh-FfJ2xuQnBoUVwUkwNr6hrRMP6vj0YY9cAP2U', '2022-10-26 21:40:40.707785');
+INSERT INTO public.sessions VALUES (14, 5, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsImlhdCI6MTY2NjgyMTQwMSwiZXhwIjoxNjY2ODI4NjAxfQ.sT5pYaAHzrrAVWaLaDknxlKSRqmLWPvcjgqZIZTp2fQ', '2022-10-26 21:56:41.743003');
+INSERT INTO public.sessions VALUES (15, 6, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYsImlhdCI6MTY2NjgyMTgzMywiZXhwIjoxNjY2ODI5MDMzfQ.5lCZP2bGtnc5sOU3nDpBTy2fR14Fqkdi7fzXpKBHKP0', '2022-10-26 22:03:53.28175');
+INSERT INTO public.sessions VALUES (16, 5, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsImlhdCI6MTY2NjgyMjA3NywiZXhwIjoxNjY2ODI5Mjc3fQ.q6vAdKOpteBtE_vW26FM79vC3XHGYNIRDsfJDN5xW50', '2022-10-26 22:07:57.981871');
+INSERT INTO public.sessions VALUES (17, 5, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsImlhdCI6MTY2NjgyMjI4MCwiZXhwIjoxNjY2ODI5NDgwfQ.16-GvUtLE1amI1vcw5XT0Yxx2AlbbXullceiKLpg4yQ', '2022-10-26 22:11:20.486705');
+INSERT INTO public.sessions VALUES (18, 7, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjcsImlhdCI6MTY2NjgyOTA2MiwiZXhwIjoxNjY2ODM2MjYyfQ.gzGxtVKveSzIivCDRZqkmu-axDdWThAVJ0CupyRGDVI', '2022-10-27 00:04:22.864854');
+INSERT INTO public.sessions VALUES (19, 6, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYsImlhdCI6MTY2NjgzNDE0MCwiZXhwIjoxNjY2ODQxMzQwfQ.99m4F50trVQBZVKftP3bYCTvtZC5ttz9K17qSxoZg00', '2022-10-27 01:29:00.861898');
+INSERT INTO public.sessions VALUES (20, 8, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjgsImlhdCI6MTY2NjgzNDIxNywiZXhwIjoxNjY2ODQxNDE3fQ.axQmwPjR2ks2qcZL4aB9EOGKbMrPhLqilmw9w2NaR9o', '2022-10-27 01:30:18.122752');
+INSERT INTO public.sessions VALUES (21, 6, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYsImlhdCI6MTY2NjgzNjY1MiwiZXhwIjoxNjY2ODQzODUyfQ.zB2mSwjmX5SZwG4jxW59j-u3Kip1ZTHkp1AGSeGc6D8', '2022-10-27 02:10:52.784594');
+INSERT INTO public.sessions VALUES (22, 2, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTY2Njg5NDk2MCwiZXhwIjoxNjY2OTAyMTYwfQ.LQW5Td_oFglMpKxMUSHW7S7kEGfBMv8XBuUuP2qxnjo', '2022-10-27 18:22:41.077591');
+INSERT INTO public.sessions VALUES (23, 2, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTY2Njg5NTAzMywiZXhwIjoxNjY2OTAyMjMzfQ.I8hIxANXTGkIS1DyuGS0S8VdEWEtn0u3eIWszmj1xNk', '2022-10-27 18:23:54.028295');
+INSERT INTO public.sessions VALUES (24, 1, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2Njg5ODczMSwiZXhwIjoxNjY2OTA1OTMxfQ.fMSpExZr8NEbbU6VgrvOsAVSrtt0Ib78xIbxUtkfLUI', '2022-10-27 19:25:32.016361');
+INSERT INTO public.sessions VALUES (25, 1, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2NjkwMTgxNSwiZXhwIjoxNjY2OTA5MDE1fQ.oFWs8rGynvBlYDZ8tSwz-Inly73uR_m0g9u75OAm7_M', '2022-10-27 20:16:55.650471');
 
 
 --
 -- Data for Name: trends; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.trends VALUES (1, 'react');
-INSERT INTO public.trends VALUES (2, 'front-end');
-INSERT INTO public.trends VALUES (3, 'development');
-INSERT INTO public.trends VALUES (4, 'framework');
-INSERT INTO public.trends VALUES (5, 'reactjs');
-INSERT INTO public.trends VALUES (6, 'developer');
-INSERT INTO public.trends VALUES (7, 'software');
-INSERT INTO public.trends VALUES (8, 'bootcamp');
-INSERT INTO public.trends VALUES (9, 'news');
-INSERT INTO public.trends VALUES (10, 'insta');
-INSERT INTO public.trends VALUES (11, 'netflix');
-INSERT INTO public.trends VALUES (12, 'noticia');
-INSERT INTO public.trends VALUES (13, 'novidade');
-INSERT INTO public.trends VALUES (14, 'show');
-INSERT INTO public.trends VALUES (15, 'isso');
-INSERT INTO public.trends VALUES (16, 'calvo');
-INSERT INTO public.trends VALUES (17, 'seila');
-INSERT INTO public.trends VALUES (18, 'tmj');
-INSERT INTO public.trends VALUES (19, 'bora');
-INSERT INTO public.trends VALUES (20, 'calvofobia');
+INSERT INTO public.trends VALUES (1, 'news');
+INSERT INTO public.trends VALUES (2, 'noticias');
+INSERT INTO public.trends VALUES (3, 'ana');
+INSERT INTO public.trends VALUES (4, 'noticias
+');
+INSERT INTO public.trends VALUES (5, 'nuncaDesista');
+INSERT INTO public.trends VALUES (6, 'funfaPF');
 
 
 --
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.users VALUES (1, 'Gabriel Rosin', 'teste@gmail.com', '$2b$12$Ylp/5eSM0VpG3EVtlu.88OxQtIZ2aLyfHuA433ySSjFAVAffYwNBW', 'https://images.contentstack.io/v3/assets/blt187521ff0727be24/blt71009d4f4fabcf6f/60ee0f3fb898ee4eaeb6e6a7/Lulu_0.jpg');
-INSERT INTO public.users VALUES (2, 'Gabriel Rosin', 'teste2@gmail.com', '$2b$12$sFcHyrkKUkotJS6HLa6y9u6iTdobFF9zOTy7HgKb6elpHkUH8lLDK', 'https://meululudapomerania.com.br/wp-content/uploads/2017/12/11.04.2017-1-e1514407405414.jpg');
-INSERT INTO public.users VALUES (3, 'Ana Paula', 'ana1@gmail.com', '$2b$12$Hwe6NfwJhy/I/jyoN43MfOF.2.zhywm5FrBhDS1SxYp3QNoh0MjsS', 'https://wl-incrivel.cf.tsp.li/resize/728x/jpg/e86/78d/cefdee58f2a13954c8fb59a585.jpg');
-INSERT INTO public.users VALUES (4, 'Frotté', 'igor@igorf.com', '$2b$12$EHWRqRjX.lLHVUEhtHjRhOlzF9ctPUKFNeEsDwDNN0RxBz6eGaT4q', 'https://w7.pngwing.com/pngs/114/579/png-transparent-pink-cross-stroke-ink-brush-pen-red-ink-brush-ink-leave-the-material-text.png');
-INSERT INTO public.users VALUES (5, 'Zé Dorinha', 'zedorinha@gmail.com', '$2b$12$MVOsMS.IQoYnp1ZZjc/TwOBDx5n6B.UQVMPz.tUdsYX3zTe.8vRT6', 'https://courier-images-web.imgix.net/static/img/meta_image.png?auto=compress,format&fit=max&w=undefined&h=undefined&dpr=2&fm=png');
-INSERT INTO public.users VALUES (6, 'Perfil De Teste', 'teste@teste.com', '$2b$12$68XBmnJBqHwt4yW3pCBqHePArBbjLQgmwqFK69PYNXzFO5RjdRLnC', 'https://semeandoafeto.imadel.org.br/packages/trustir/exclusiva/img/user_placeholder.png');
-INSERT INTO public.users VALUES (7, 'User Name', 'email@valido.com', '$2b$12$ZRyI5pWdM1fG1hm26a8Msu/Fu2l4eSGU5pJhWukDiOqFhv7LvywFW', 'https://semeandoafeto.imadel.org.br/packages/trustir/exclusiva/img/user_placeholder.png');
-INSERT INTO public.users VALUES (8, 'UserName', 'email2@valido.com', '$2b$12$AHbSVVvlH1G5J977CDdYV.RHIjVWlY5m.Y1tzmt7WodiTnLO7pfHe', '.imadel.org.br/packages/trustir/exclusiva/img/user_placeholder.png');
+INSERT INTO public.users VALUES (1, 'Ana Paula Conta Teste', 'ana@teste.com', '$2b$12$3MRAJfg1eqCtS8/tK0qALuC4z0c4070uu.qdBRj.Ilrorh.bRDrWW', 'https://4maos.com.br/wp-content/uploads/2022/07/004dc630b3e5734a071177ce4df81f0e.jpg');
+INSERT INTO public.users VALUES (2, 'Perfil Teste', 'teste@teste.com', '$2b$12$exCK7IjJ9ae0uzhFciC/AeWyczcJ3KRuiaHZ8PPUFCYZfa0bhg7im', 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Breezeicons-actions-22-im-user.svg/1200px-Breezeicons-actions-22-im-user.svg.png');
+INSERT INTO public.users VALUES (3, 'Jonas Teste', 'pedrojonas.pj77@gmail.com', '$2b$12$ujAXQD9JSbDCxA6xSWL/NuqLT4LZq1cGTe5O8cMaihK/TA9cFp2Nm', 'https://res.cloudinary.com/lptennis/image/upload/v1481741458/sirzxzlkyzmfbxh4m0hj.jpg');
+INSERT INTO public.users VALUES (4, 'Mais um Teste', 'teste2@teste.com', '$2b$12$0sKapeXd6dTB7kdC3J/6W.Hr2rGAg1FAKVwMEpmFKU4kkhRAYcQai', 'https://ps.w.org/metronet-profile-picture/assets/icon-256x256.png?rev=2464419');
+INSERT INTO public.users VALUES (5, 'Lili Ana', 'lili@teste.com', '$2b$12$o0SrwZZNgIffbyJbUyxZT.U.CMA18fWe9k5m8ocAe4.MwdEXBmG7e', 'https://i.pinimg.com/originals/0a/ec/76/0aec76a31bfdad081f3307c7d0b01f5e.jpg');
+INSERT INTO public.users VALUES (6, 'igorFf', 'olhaele@oi.com', '$2b$12$kc/eBSBcZll713q9JfVvEu3cVCFtZbCl..xb/nGwhtdta0NyXX2rK', 'https://www.zeldadungeon.net/wiki/images/f/fd/Link.png');
+INSERT INTO public.users VALUES (7, 'testando', 'teste5@gmail.com', '$2b$12$SXmwxHuEqPUUfRXNVQTlfOMYjE5jFNc7L00CwfeSTSgClU6SfzYNK', 'https://almeidajunior-prod1.s3.amazonaws.com/prod/uploads/news/5d81505ac6770.jpg');
+INSERT INTO public.users VALUES (8, 'Conta um', 'conta1@teste.com', '$2b$12$4juWzlKIdRMCJkuokxwr9O/Fw6Ir2HTK01QP8KNopCH.KeUyOv/ju', 'https://cdn.dribbble.com/users/1577045/screenshots/4914645/media/028d394ffb00cb7a4b2ef9915a384fd9.png?compress=1&resize=400x300&vertical=top');
+
+
+--
+-- Name: comments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.comments_id_seq', 2, true);
+
+
+--
+-- Name: follows_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.follows_id_seq', 6, true);
 
 
 --
 -- Name: likes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.likes_id_seq', 39, true);
+SELECT pg_catalog.setval('public.likes_id_seq', 3, true);
 
 
 --
 -- Name: posts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.posts_id_seq', 19, true);
+SELECT pg_catalog.setval('public.posts_id_seq', 8, true);
 
 
 --
 -- Name: posts_trends_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.posts_trends_id_seq', 52, true);
+SELECT pg_catalog.setval('public.posts_trends_id_seq', 16, true);
 
 
 --
 -- Name: sessions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.sessions_id_seq', 15, true);
+SELECT pg_catalog.setval('public.sessions_id_seq', 25, true);
 
 
 --
 -- Name: trends_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.trends_id_seq', 20, true);
+SELECT pg_catalog.setval('public.trends_id_seq', 6, true);
 
 
 --
@@ -427,6 +501,22 @@ SELECT pg_catalog.setval('public.trends_id_seq', 20, true);
 --
 
 SELECT pg_catalog.setval('public.users_id_seq', 8, true);
+
+
+--
+-- Name: comments comments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.comments
+    ADD CONSTRAINT comments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: follows follows_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.follows
+    ADD CONSTRAINT follows_pkey PRIMARY KEY (id);
 
 
 --
@@ -499,6 +589,54 @@ ALTER TABLE ONLY public.users
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users users_username_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_username_key UNIQUE (username);
+
+
+--
+-- Name: comments comments_postId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.comments
+    ADD CONSTRAINT "comments_postId_fkey" FOREIGN KEY ("postId") REFERENCES public.posts(id) ON DELETE CASCADE;
+
+
+--
+-- Name: comments comments_postid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.comments
+    ADD CONSTRAINT comments_postid_fkey FOREIGN KEY ("postId") REFERENCES public.posts(id);
+
+
+--
+-- Name: comments comments_userid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.comments
+    ADD CONSTRAINT comments_userid_fkey FOREIGN KEY ("userId") REFERENCES public.users(id);
+
+
+--
+-- Name: follows follows_followedId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.follows
+    ADD CONSTRAINT "follows_followedId_fkey" FOREIGN KEY ("followedId") REFERENCES public.users(id);
+
+
+--
+-- Name: follows follows_followerId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.follows
+    ADD CONSTRAINT "follows_followerId_fkey" FOREIGN KEY ("followerId") REFERENCES public.users(id);
 
 
 --
