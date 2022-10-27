@@ -1,4 +1,6 @@
-import { getUsersBySearch } from "../repositories/users.repository.js";
+import connection from "../db/db.js";
+import { STATUS_CODE } from "../enums/statusCode.js";
+import { getUserById, getUserDataByPostId, getUsersBySearch } from "../repositories/users.repository.js";
 import { searchSchema } from "../schemas/searchSchema.js";
 
 async function searchUser (req, res) {
@@ -20,4 +22,16 @@ async function searchUser (req, res) {
     }
 }
 
-export { searchUser };
+async function getUserDataByOriginalPostId (req, res) {
+    const { postId } = res.locals;
+
+    try {
+        const userData = (await getUserDataByPostId(postId)).rows[0];
+
+        return res.status(STATUS_CODE.OK).send(userData);
+    } catch (error) {
+        return res.status(STATUS_CODE.SERVER_ERROR).send(error.message);
+    }
+}
+
+export { searchUser, getUserDataByOriginalPostId };
