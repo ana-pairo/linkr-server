@@ -18,6 +18,18 @@ function getTotalPostCommentsByPostId(postId) {
     `,
     [postId]
   );
-}
+};
 
-export { getTotalPostCommentsByPostId };
+function postCommentsByPostId (postId, userId, description){
+  return connection.query(
+    `
+      INSERT INTO comments
+        ("postId", "userId", description)
+      VALUES
+        ($1, $2, $3);
+    `,[postId, userId, description]
+  );
+};
+
+
+export { getTotalPostCommentsByPostId, postCommentsByPostId };
