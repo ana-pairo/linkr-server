@@ -2,7 +2,7 @@ import connection from "../db/db.js";
 
 function getUserById (id) {
     return connection.query(
-        `SELECT * FROM users WHERE id= $1;`,
+        `SELECT * FROM users WHERE id = $1;`,
         [id]
     );
 }
@@ -27,7 +27,7 @@ function getPostsByUser (userId) {
 function getAllPosts (number) {
     return connection.query(
         `
-            SELECT               
+            SELECT
             posts.*, users.username, users.picture as "userPhoto", COUNT(likes.id) AS likes
             FROM
             posts
@@ -62,4 +62,18 @@ function getUsersBySearch (search) {
     );
 }
 
-export { getUserById, getPostsByUser, getAllPosts, getUsersBySearch, getQuantPosts };
+function getUserDataByPostId (postId) {
+    return connection.query(
+        `
+            SELECT 
+                users.username, users.picture
+            FROM
+                users
+            JOIN posts ON posts."userId" = users.id
+            WHERE posts.id = $1;
+        `,
+        [postId]
+    );
+}
+
+export { getUserById, getPostsByUser, getAllPosts, getUsersBySearch, getUserDataByPostId, getQuantPosts };
