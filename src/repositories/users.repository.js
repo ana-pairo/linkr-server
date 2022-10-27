@@ -77,7 +77,7 @@ function getUsersBySearch(search) {
   return connection.query(
     `
       SELECT 
-        * 
+        users.*, follows."followerId" 
       FROM 
         users
       LEFT JOIN 
