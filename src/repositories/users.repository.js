@@ -66,7 +66,7 @@ function getUserDataByPostId (postId) {
     return connection.query(
         `
             SELECT 
-                users.username, users.picture
+                users.id, users.username, users.picture
             FROM
                 users
             JOIN posts ON posts."userId" = users.id

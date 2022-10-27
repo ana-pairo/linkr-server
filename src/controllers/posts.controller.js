@@ -84,7 +84,7 @@ async function postsByUser (req, res) {
             postsData.push(await InsertIntoPostDataUrlMetadata(posts[i]))
         }
 
-        return res.status(200).send({user: {username: user[0].username, picture:  user[0].picture}, posts: postsData});
+        return res.status(200).send({user: { userId: user[0].id, username: user[0].username, picture:  user[0].picture}, posts: postsData});
     } catch (error) {
         return res.status(500).send(error.message);
     }
