@@ -133,7 +133,9 @@ async function allPosts(req, res) {
       postsData.push(await InsertIntoPostDataUrlMetadata(posts[i]));
     }
 
-    const data = { postsData: [...postsData], following };
+    let postQ = (await getQuantPosts()).rows;
+
+    const data = { posts: [...postsData], following, quant: postQ[0].quant };
 
     return res.status(200).send(data);
   } catch (error) {

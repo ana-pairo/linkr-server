@@ -68,8 +68,7 @@ function getQuantPosts() {
         FROM
         posts
         JOIN users ON posts."userId" = users.id
-        LEFT JOIN likes ON likes."postId" = posts.id
-        GROUP BY posts.id, users.username, users.picture;
+        LEFT JOIN likes ON likes."postId" = posts.id;
         `
   );
 }
