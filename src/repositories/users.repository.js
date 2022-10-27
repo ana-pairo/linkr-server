@@ -75,7 +75,17 @@ function getQuantPosts() {
 
 function getUsersBySearch(search) {
   return connection.query(
-    `SELECT * FROM users WHERE LOWER(username) LIKE $1;`,
+    `
+      SELECT 
+        users.*, follows."followerId" 
+      FROM 
+        users
+      LEFT JOIN 
+        follows ON users.id = follows."followedId" 
+      WHERE 
+        LOWER(username) LIKE $1
+      ORDER BY follows.id ASC;
+    `,
     [search.toLowerCase() + "%"]
   );
 }
