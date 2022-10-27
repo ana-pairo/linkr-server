@@ -73,20 +73,22 @@ function getQuantPosts() {
   );
 }
 
-function getUsersBySearch(search) {
+function getUsersBySearch({ search, userId }) {
   return connection.query(
     `
       SELECT 
-        users.*, follows."followerId" 
+        users.id, users.username, users.picture, BOOL_OR(follows."followerId" = $1) as follower
       FROM 
         users
       LEFT JOIN 
-        follows ON users.id = follows."followedId" 
+        follows ON users.id = follows."followedId"
       WHERE 
-        LOWER(username) LIKE $1
-      ORDER BY follows.id ASC;
+        LOWER(username) LIKE $2
+      GROUP BY 
+        users.id, users.username, users.picture
+      ORDER BY follower ASC;
     `,
-    [search.toLowerCase() + "%"]
+    [userId, search.toLowerCase() + "%"]
   );
 }
 
