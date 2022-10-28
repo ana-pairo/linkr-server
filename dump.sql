@@ -368,7 +368,6 @@ INSERT INTO public.posts VALUES (5, 4, 'https://www.poder360.com.br/economia/ban
  ', NULL);
 INSERT INTO public.posts VALUES (6, 6, 'http://facebook.com', 'Agora foi :)) #nuncaDesista', NULL);
 INSERT INTO public.posts VALUES (7, 6, 'http://youtube.com', 'ewfewf #funfaPF', NULL);
-INSERT INTO public.posts VALUES (8, 6, 'http://facebook.com', 'werewr', NULL);
 
 
 --
