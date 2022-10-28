@@ -37,21 +37,21 @@ function getAllFollowingUsers({ userId }) {
 function getAllPosts({ userId, number }) {
   return connection.query(
     `
-        SELECT 
+        SELECT
             posts.*, users.username, users.picture as "userPhoto", COUNT(likes.id) AS likes
-        FROM 
+        FROM
             posts
-        JOIN 
+        JOIN
             follows ON "userId" = "followedId"
-        JOIN 
+        JOIN
             users ON posts."userId" = users.id
-        LEFT JOIN 
+        LEFT JOIN
             likes ON likes."postId" = posts.id
-        WHERE 
+        WHERE
             "followerId" = $1
-        GROUP BY 
+        GROUP BY
             posts.id, users.username, users.picture
-        ORDER BY 
+        ORDER BY
             posts.id DESC LIMIT $2;
     `,
     [userId, number * 10]
@@ -59,6 +59,31 @@ function getAllPosts({ userId, number }) {
 }
 
 function getQuantPosts(userId) {
+// GET ALL POSTS COM POSTS DO PROPRIO USUARIO
+
+// function getAllPosts({ userId, number }) {
+//   return connection.query(
+//     `
+//     SELECT
+//     posts.*, users.username, users.picture as "userPhoto", COUNT(likes.id) AS likes FROM posts
+//     LEFT JOIN
+//     follows ON "userId" = "followedId"
+//     LEFT JOIN
+//     likes ON likes."postId" = posts.id
+//     JOIN
+//     users ON posts."userId" = users.id
+//     WHERE
+//     posts."userId" = $1
+//     OR
+//     follows."followerId" = $1
+//     GROUP BY
+//     posts.id, users.username, users.picture
+//     ORDER BY
+//     posts.id DESC LIMIT $2;
+//     `,
+//     [userId, number * 10]
+//   );
+// }
   return connection.query(
     `
       SELECT 
@@ -78,10 +103,22 @@ function getQuantPosts(userId) {
   );
 }
 
-function getUsersBySearch(search) {
+function getUsersBySearch({ search, userId }) {
   return connection.query(
-    `SELECT * FROM users WHERE LOWER(username) LIKE $1;`,
-    [search.toLowerCase() + "%"]
+    `
+      SELECT 
+        users.id, users.username, users.picture, BOOL_OR(follows."followerId" = $1) as follower
+      FROM 
+        users
+      LEFT JOIN 
+        follows ON users.id = follows."followedId"
+      WHERE 
+        LOWER(username) LIKE $2
+      GROUP BY 
+        users.id, users.username, users.picture
+      ORDER BY follower ASC;
+    `,
+    [userId, search.toLowerCase() + "%"]
   );
 }
 
@@ -89,7 +126,7 @@ function getUserDataByPostId(postId) {
   return connection.query(
     `
             SELECT 
-                users.username, users.picture
+                users.id, users.username, users.picture
             FROM
                 users
             JOIN posts ON posts."userId" = users.id

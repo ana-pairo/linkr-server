@@ -103,7 +103,7 @@ async function postsByUser(req, res) {
     }
 
     return res.status(200).send({
-      user: { username: user[0].username, picture: user[0].picture },
+      user: { userId: user[0].id, username: user[0].username, picture: user[0].picture },
       posts: postsData,
     });
   } catch (error) {
