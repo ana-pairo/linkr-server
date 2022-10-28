@@ -7,16 +7,15 @@ function getUserById(id) {
 function getPostsByUser(userId) {
   return connection.query(
     `
-            SELECT               
-                posts.*, users.username, users.picture as "userPhoto", COUNT(likes.id) AS likes
-            FROM
-                posts_trends
-            JOIN posts ON posts_trends."postId" = posts.id
-            JOIN users ON posts."userId" = users.id
-            LEFT JOIN likes ON likes."postId" = posts.id
-            WHERE users.id = $1
-            GROUP BY posts.id, users.username, users.picture LIMIT 20;
-        `,
+      SELECT               
+        posts.*, users.username, users.picture as "userPhoto", COUNT(likes.id) AS likes
+      FROM
+        posts
+      JOIN users ON posts."userId" = users.id
+        LEFT JOIN likes ON likes."postId" = posts.id
+      WHERE users.id = $1
+      GROUP BY posts.id, users.username, users.picture;
+    `,
     [userId]
   );
 }
@@ -59,17 +58,23 @@ function getAllPosts({ userId, number }) {
   );
 }
 
-function getQuantPosts() {
-  // Ana... Tem q mudar aqui tbm :)
+function getQuantPosts(userId) {
   return connection.query(
     `
-        SELECT               
+      SELECT 
         COUNT(posts.id) As quant
-        FROM
+      FROM 
         posts
-        JOIN users ON posts."userId" = users.id
-        LEFT JOIN likes ON likes."postId" = posts.id;
-        `
+      JOIN 
+        follows ON "userId" = "followedId"
+      JOIN 
+        users ON posts."userId" = users.id
+      LEFT JOIN 
+        likes ON likes."postId" = posts.id
+      WHERE 
+        "followerId" = $1
+    `,
+    [userId]
   );
 }
 

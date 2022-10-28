@@ -133,7 +133,7 @@ async function allPosts(req, res) {
       postsData.push(await InsertIntoPostDataUrlMetadata(posts[i]));
     }
 
-    let postQ = (await getQuantPosts()).rows;
+    let postQ = (await getQuantPosts(userId)).rows;
 
     const data = { posts: [...postsData], following, quant: postQ[0].quant };
 
@@ -144,8 +144,9 @@ async function allPosts(req, res) {
 }
 
 async function quantPosts(req, res) {
+  const { userId } = res.locals;
   try {
-    let posts = (await getQuantPosts()).rows;
+    let posts = (await getQuantPosts(userId)).rows;
 
     return res.status(200).send(posts[0].quant);
   } catch (error) {
