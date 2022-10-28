@@ -27,9 +27,9 @@ function postCommentsByPostId (postId, userId, description){
         ("postId", "userId", description)
       VALUES
         ($1, $2, $3);
-    `,[postId, userId, description]
+    `,
+    [postId, userId, description]
   );
 };
-
 
 export { getTotalPostCommentsByPostId, postCommentsByPostId };

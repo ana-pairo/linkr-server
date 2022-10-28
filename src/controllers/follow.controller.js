@@ -3,6 +3,7 @@ import {
   isFollowing,
   insertFollow,
   deleteFollow,
+  getFollowersIdByUser
 } from "../repositories/follow.repository.js";
 
 async function follow(req, res) {
@@ -41,4 +42,15 @@ async function checkFollow(req, res) {
   }
 }
 
-export { follow, checkFollow };
+async function getFollowersByUser(req, res) {
+  const {userId} = req.params;
+
+  try{
+    const followersId = await getFollowersIdByUser(userId);
+    res.send(followersId.rows).status(STATUS_CODE.OK)
+  } catch (error) {
+    res.sendStatus(STATUS_CODE.SERVER_ERROR);
+  };
+};
+
+export { follow, checkFollow, getFollowersByUser };
