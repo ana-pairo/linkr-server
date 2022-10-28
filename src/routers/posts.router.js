@@ -4,8 +4,8 @@ import { validatePostId } from '../middlewares/posts.middleware.js';
 
 const router = express.Router();
 
+router.post('/post', createPost);
 router.patch('/post/:postId', validatePostId, updatePost);
 router.delete('/post/:postId', validatePostId, deletePost);
-router.post('/post', createPost);
 
 export default router;
