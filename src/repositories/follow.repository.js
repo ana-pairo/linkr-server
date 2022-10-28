@@ -54,4 +54,17 @@ async function deleteFollow({ follower, followed }) {
   );
 }
 
-export { checkUsers, isFollowing, insertFollow, deleteFollow };
+function getFollowersIdByUser (userId){
+  return connection.query(
+    `
+      SELECT 
+        "followerId" 
+        FROM 
+          follows 
+        WHERE "followedId" = $1;
+    `,
+    [userId]
+  );
+};
+
+export { checkUsers, isFollowing, insertFollow, deleteFollow, getFollowersIdByUser };
