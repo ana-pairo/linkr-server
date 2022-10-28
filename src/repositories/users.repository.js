@@ -60,31 +60,6 @@ function getAllPosts({ userId, number }) {
 }
 
 function getQuantPosts(userId) {
-// GET ALL POSTS COM POSTS DO PROPRIO USUARIO
-
-// function getAllPosts({ userId, number }) {
-//   return connection.query(
-//     `
-//     SELECT
-//     posts.*, users.username, users.picture as "userPhoto", COUNT(likes.id) AS likes FROM posts
-//     LEFT JOIN
-//     follows ON "userId" = "followedId"
-//     LEFT JOIN
-//     likes ON likes."postId" = posts.id
-//     JOIN
-//     users ON posts."userId" = users.id
-//     WHERE
-//     posts."userId" = $1
-//     OR
-//     follows."followerId" = $1
-//     GROUP BY
-//     posts.id, users.username, users.picture
-//     ORDER BY
-//     posts.id DESC LIMIT $2;
-//     `,
-//     [userId, number * 10]
-//   );
-// }
   return connection.query(
     `
       SELECT 
@@ -117,7 +92,7 @@ function getUsersBySearch({ search, userId }) {
         LOWER(username) LIKE $2
       GROUP BY 
         users.id, users.username, users.picture
-      ORDER BY follower ASC;
+      ORDER BY follower DESC NULLS LAST;
     `,
     [userId, search.toLowerCase() + "%"]
   );
