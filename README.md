@@ -37,7 +37,7 @@ In the project directory, you can run:
 Runs the app in the development mode with nodemon.\
 Test it [http://localhost:4000](http://localhost:4000) with a client (e.g. Thunderclient).
 
-### `npm dev`
+### `npm start`
 
 Runs the app in the development mode.\
 Test it [http://localhost:4000](http://localhost:4000) with a client (e.g. Thunderclient).
