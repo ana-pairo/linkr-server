@@ -1,6 +1,6 @@
 <h1 align="center">Linkr API</h1>
 
-This project was made using Node.js and Express
+This project was made using Node.js and Express and consists on an API used for a social network back-end workprocess.
 
 ## Features
 
