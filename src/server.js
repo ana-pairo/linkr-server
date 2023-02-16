@@ -18,7 +18,7 @@ server.use(express.json());
 server.use(cors());
 
 server.get("/status", (req, res) => {
-  res.sendStatus(200);
+  return res.sendStatus(200);
 });
 
 server.use(authRouter);
