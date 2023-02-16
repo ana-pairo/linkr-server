@@ -1,0 +1,36 @@
+version: "3"
+services:
+  linkr-server:
+    container_name: linkr-server
+    build: . 
+    ports:
+      - 80:4002
+    depends_on:
+      - linkr-db
+    env_file:
+      - .env
+    volumes:
+      - .:/linkr-server
+    networks:
+      - linkr-network
+
+  linkr-db:
+    image: postgres:13
+    container_name: linkr-db
+    restart: always 
+    ports:
+      - 2345:5432
+    env_file:
+      - .env
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    networks:
+      - linkr-network
+
+volumes:
+  postgres:
+
+
+networks:
+  linkr-network:
+    driver: bridge
