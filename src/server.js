@@ -17,10 +17,12 @@ const server = express();
 server.use(express.json());
 server.use(cors());
 
+server.get("/status", (req, res) => {
+  res.sendStatus(200);
+});
+
 server.use(authRouter);
-
 server.use(authMiddleware);
-
 server.use(trendsRouter);
 server.use(postsRouter);
 server.use(likesRouter);
@@ -28,10 +30,6 @@ server.use(usersRouter);
 server.use(followRouter);
 server.use(sharesRouter);
 server.use(commentsRouter);
-
-server.get("/status", (req, res) => {
-  res.sendStatus(200);
-});
 
 server.listen(
   process.env.PORT,
