@@ -6,7 +6,7 @@ COPY package*.json ./
 
 RUN npm install
 
-COPY . ./linkr-server
+COPY . .
 
 
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "start"] 
