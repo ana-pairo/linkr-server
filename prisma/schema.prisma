@@ -1,0 +1,81 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model comments {
+  id          Int    @id @default(autoincrement())
+  postId      Int
+  userId      Int
+  description String
+  posts       posts  @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users       users  @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "comments_userid_fkey")
+}
+
+model follows {
+  id                              Int   @id @default(autoincrement())
+  followerId                      Int
+  followedId                      Int
+  users_follows_followedIdTousers users @relation("follows_followedIdTousers", fields: [followedId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users_follows_followerIdTousers users @relation("follows_followerIdTousers", fields: [followerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model likes {
+  id     Int   @id @default(autoincrement())
+  postId Int
+  userId Int
+  posts  posts @relation(fields: [postId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users  users @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model posts {
+  id           Int            @id @default(autoincrement())
+  userId       Int
+  link         String
+  description  String?
+  originalId   Int?
+  comments     comments[]
+  likes        likes[]
+  users        users          @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  posts_trends posts_trends[]
+}
+
+model posts_trends {
+  id      Int    @id @default(autoincrement())
+  trendId Int
+  postId  Int
+  posts   posts  @relation(fields: [postId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  trends  trends @relation(fields: [trendId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model sessions {
+  id         Int       @id @default(autoincrement())
+  userId     Int
+  token      String    @unique
+  createTime DateTime? @default(now()) @db.Timestamp(6)
+  users      users     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model trends {
+  id           Int            @id @default(autoincrement())
+  name         String         @unique @db.VarChar(30)
+  posts_trends posts_trends[]
+}
+
+model users {
+  id                                Int        @id @default(autoincrement())
+  username                          String     @unique
+  email                             String     @unique
+  password                          String
+  picture                           String
+  comments                          comments[]
+  follows_follows_followedIdTousers follows[]  @relation("follows_followedIdTousers")
+  follows_follows_followerIdTousers follows[]  @relation("follows_followerIdTousers")
+  likes                             likes[]
+  posts                             posts[]
+  sessions                          sessions[]
+}
