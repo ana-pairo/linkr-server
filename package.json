@@ -7,8 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "npx nodemon src/server",
-    "start": "node ./src/server.js",
-    "docker": "prisma migrate deploy && prisma migrate dev && npm run start"
+    "start": "node ./src/server.js"
   },
   "keywords": [],
   "author": "",
@@ -26,7 +25,6 @@
     "url-metadata": "^2.5.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.20",
-    "prisma": "^4.10.1"
+    "nodemon": "^2.0.20"
   }
 }
