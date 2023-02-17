@@ -32,6 +32,6 @@ server.use(sharesRouter);
 server.use(commentsRouter);
 
 server.listen(
-  process.env.PORT,
+  process.env.PORT || 4002,
   console.log(`Listening to PORT ${process.env.PORT}`)
 );
