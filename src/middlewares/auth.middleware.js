@@ -11,6 +11,8 @@ import {
 } from "../repositories/auth.repository.js";
 
 async function signUpMiddleware(req, res, next) {
+console.log("entrou no middleware");
+
   if (!req.body) {
     res.sendStatus(STATUS_CODE.BAD_REQUEST);
   }
@@ -43,6 +45,7 @@ async function signUpMiddleware(req, res, next) {
       return;
     }
   } catch (error) {
+    console.log(error);
     res.sendStatus(STATUS_CODE.SERVER_ERROR);
     return;
   }
@@ -56,6 +59,7 @@ async function signUpMiddleware(req, res, next) {
       return;
     }
   } catch (error) {
+    console.log(error);
     res.sendStatus(STATUS_CODE.SERVER_ERROR);
     return;
   }
