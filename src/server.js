@@ -10,6 +10,14 @@ import followRouter from "./routers/follow.router.js";
 import sharesRouter from "./routers/shares.router.js";
 import commentsRouter from "./routers/comments.router.js";
 import { authMiddleware } from "./middlewares/auth.middleware.js";
+import https from "https";
+import * as fs from "fs";
+
+
+const options = {
+  key: fs.readFileSync("./src/config/server.key"),
+  cert: fs.readFileSync("./src/config/server.cert"),
+};
 
 dotenv.config();
 
@@ -31,7 +39,9 @@ server.use(followRouter);
 server.use(sharesRouter);
 server.use(commentsRouter);
 
-server.listen(
-  process.env.PORT || 4002,
-  console.log(`Listening to PORT ${process.env.PORT}`)
-);
+https
+  .createServer(options, server)
+  .listen(
+    process.env.PORT || 443,
+    console.log(`Listening to PORT ${process.env.PORT}`)
+  );
