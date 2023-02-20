@@ -14,8 +14,8 @@ import https from "https";
 import * as fs from "fs";
 
 const options = {
-  key: fs.readFileSync("config/server.key"),
-  cert: fs.readFileSync("config/server.cert"),
+  key: fs.readFileSync("./config/server.key"),
+  cert: fs.readFileSync("./config/server.cert"),
 };
 
 dotenv.config();
