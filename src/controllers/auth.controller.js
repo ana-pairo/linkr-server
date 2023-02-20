@@ -17,7 +17,6 @@ async function signUp(req, res) {
 
     res.sendStatus(STATUS_CODE.CREATED);
   } catch (error) {
-console.log(error);
     res.status(STATUS_CODE.SERVER_ERROR).send(error);
   }
 }
