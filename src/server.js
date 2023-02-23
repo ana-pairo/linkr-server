@@ -12,12 +12,11 @@ import commentsRouter from "./routers/comments.router.js";
 import { authMiddleware } from "./middlewares/auth.middleware.js";
 import https from "https";
 import * as fs from "fs";
-import key from "./config/server.key";
-import cert from "./config/server.cert";
+
 
 const options = {
-  key: fs.readFileSync(key),
-  cert: fs.readFileSync(cert),
+  key: fs.readFileSync("./src/config/server.key"),
+  cert: fs.readFileSync("./src/config/server.cert"),
 };
 
 dotenv.config();
