@@ -34,13 +34,9 @@ Clone the project in your server with the following command:
    - `TOKEN_SECRET`
    - `DATABASE_URL`
 
-   #
-
 2. The `DATABASE_URL` must be completed considering the pattern below:
 
    `postgresql://<POSTGRES_USERNAME>:<POSTGRES_PASSWORD>@<POSTGRES_HOST>:<POSTGRES_PORT>/<POSTGRES_DATABASE>?schema=public`
-
-   #
 
 3. Create a self-signed certificate by running the following command at the `src/config/` level:
 
@@ -50,10 +46,6 @@ Clone the project in your server with the following command:
 
    Make sure that both `server.key` and `server.cert` are created and inside the config folder.
 
-   #
-
 4. Finally, at the root level of the project, run `docker compose up` to spin up the linkr server.
-
-   #
 
 5. (Optional) Run `docker compose down -v` to stop the linkr server.
