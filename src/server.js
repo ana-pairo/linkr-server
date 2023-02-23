@@ -13,7 +13,6 @@ import { authMiddleware } from "./middlewares/auth.middleware.js";
 import https from "https";
 import * as fs from "fs";
 
-
 const options = {
   key: fs.readFileSync("./src/config/server.key"),
   cert: fs.readFileSync("./src/config/server.cert"),
@@ -42,6 +41,6 @@ server.use(commentsRouter);
 https
   .createServer(options, server)
   .listen(
-    process.env.PORT || 443,
+    process.env.PORT || 4002,
     console.log(`Listening to PORT ${process.env.PORT}`)
   );

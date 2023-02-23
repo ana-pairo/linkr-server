@@ -1,4 +1,4 @@
-<h1 align="center">Linkr API</h1>
+<h1 align="center">Linkr Server</h1>
 
 This project was made using Node.js and Express and consists on an API used for a social network back-end workprocess.
 
@@ -16,28 +16,44 @@ This project was made using Node.js and Express and consists on an API used for 
 
 ## Documentation
 
-You can check project's simplified documentation [here](https://gamy-marmoset-929.notion.site/Linkr-d900946be89545b1a8d2d231adf40ba6).
+You can check project's simplified documentation [here](https://valley-beast-e3f.notion.site/Linkr-76f4767131244888b65b4f29e9f73e6f).
 
 ## Cloning project
 
-In order to clone the project and run it in your machine, you must run the following commands (with git and npm installed in your machine):
+Clone the project in your server with the following command:
 
-### `git clone https://github.com/gabao55/linkr-API.git`
+### `git clone https://github.com/ana-pairo/linkr-server.git`
 
-Then you must go to the project's directory and run:
+## Deploying application
 
-### `npm i`
+1. Create a `.env` file in the root of the project. Populate it based on the `.env.example` file. Keep all the values already set in the `.env.example` and provide only the following:
 
-## Available Scripts
+   - `POSTGRES_USERNAME`
+   - `POSTGRES_PASSWORD`
+   - `POSTGRES_DATABASE`
+   - `TOKEN_SECRET`
+   - `DATABASE_URL`
 
-In the project directory, you can run:
+   #
 
-### `npm dev`
+2. The `DATABASE_URL` must be completed considering the pattern below:
 
-Runs the app in the development mode with nodemon.\
-Test it [http://localhost:4000](http://localhost:4000) with a client (e.g. Thunderclient).
+   `postgresql://<POSTGRES_USERNAME>:<POSTGRES_PASSWORD>@<POSTGRES_HOST>:<POSTGRES_PORT>/<POSTGRES_DATABASE>?schema=public`
 
-### `npm start`
+   #
 
-Runs the app in the development mode.\
-Test it [http://localhost:4000](http://localhost:4000) with a client (e.g. Thunderclient).
+3. Create a self-signed certificate by running the following command at the `src/config/` level:
+
+   `openssl req -nodes -new -x509 -keyout server.key -out server.cert`
+
+   After running this command, you would get some options to fill. You can keep those options default or empty by entering ‘.‘ (dot).
+
+   Make sure that both `server.key` and `server.cert` are created and inside the config folder.
+
+   #
+
+4. Finally, at the root level of the project, run `docker compose up` to spin up the linkr server.
+
+   #
+
+5. (Optional) Run `docker compose down -v` to stop the linkr server.
